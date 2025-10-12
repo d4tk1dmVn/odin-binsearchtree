@@ -40,10 +40,4 @@ class BinaryNode
   def any_children?
     @left || @right
   end
-
-  def find_successor
-    successor = @right
-    successor = successor.right until successor.right.nil?
-    successor
-  end
 end
