@@ -15,6 +15,16 @@ class BinaryTree
     @root.nil?
   end
 
+  def find(value)
+    return if empty?
+
+    nomad = @root
+    until nomad.nil? || nomad.value == value
+      nomad = nomad.value > value ? nomad.left : nomad.right
+    end
+    nomad
+  end
+
   def delete(value)
     node_to_delete = find(value)
     return if node_to_delete.nil?
@@ -33,6 +43,7 @@ class BinaryTree
       nomad.sire_child(BinaryNode.new(value))
     end
   end
+
 
   private
 
@@ -61,8 +72,6 @@ class BinaryTree
   end
 
   def delete_node(node)
-    raise(StandardError, "Can't delete from empty tree") if empty?
-
     case node
     when node.leaf?
       @root == node ? @root = nil : node.ostracize
