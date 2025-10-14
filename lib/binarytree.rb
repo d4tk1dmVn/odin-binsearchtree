@@ -1,7 +1,8 @@
 require_relative 'binarynode'
+require_relative 'binarytreeiterativebuilder'
 
 class BinaryTree
-  include IterativeTreeBuilder
+  include BinaryTreeIterativeBuilder
 
   attr_reader :root
 
@@ -44,13 +45,12 @@ class BinaryTree
     end
   end
 
-
   private
 
   def build_tree(array)
     return nil if array.empty?
 
-    IterativeTreeBuilder.divide_and_conquer(array)
+    BinaryTreeIterativeBuilder.divide_and_conquer_build(array)
   end
 
   def delete_node_with_children(node)
