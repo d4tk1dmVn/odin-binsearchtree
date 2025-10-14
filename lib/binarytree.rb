@@ -7,9 +7,7 @@ class BinaryTree
   attr_reader :root
 
   def initialize(array = [])
-    filtered_array = array.uniq.sort
-    @length = filtered_array.length
-    @root = build_tree(filtered_array)
+    @root = build_tree(array.uniq.sort)
   end
 
   def empty?
@@ -24,6 +22,19 @@ class BinaryTree
       nomad = nomad.value > value ? nomad.left : nomad.right
     end
     nomad
+  end
+
+  def level_order
+    node_array = []
+    stack = [@root]
+    until empty? || stack.empty?
+      node = stack.pop
+      stack.push(node.right) if node.right
+      stack.push(node.left) if node.left
+      yield node if block_given?
+      node_array.append(node.value)
+    end
+    node_array unless block_given?
   end
 
   def delete(value)
