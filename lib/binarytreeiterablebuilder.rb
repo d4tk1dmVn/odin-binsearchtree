@@ -1,7 +1,7 @@
 require_relative 'binarynode'
 
-module IterativeTreeBuilder
-  def divide_and_conquer(array)
+module BinaryTreeIterativeBuilder
+  def divide_and_conquer_build(array)
     root_node = nil
     stack = [[0, array.length - 1, root_node]]
     until stack.empty?
@@ -12,6 +12,8 @@ module IterativeTreeBuilder
     end
     root_node
   end
+
+  private
 
   def manage_stack_segment(stack, array)
     left_index, right_index, parent_node = stack.pop
