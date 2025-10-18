@@ -37,6 +37,41 @@ class BinaryTree
     node_array unless block_given?
   end
 
+  def in_order
+    node_array = []
+    stack = []
+    nomad = @root
+    until stack.empty? && nomad.nil?
+      until nomad.nil?
+        stack.push(nomad)
+        nomad = nomad.left
+      end
+      nomad = stack.pop
+      node_array.append(nomad.value)
+      yield nomad if block_given?
+      nomad = nomad.right
+    end
+    node_array unless block_given?
+  end
+
+  def pre_order
+    node_array = []
+    stack = [@root]
+    until stack.empty?
+      nomad = stack.pop
+      node_array.append(nomad.value)
+      yield nomad if block_given?
+      stack.push(nomad.right) if nomad.right
+      stack.push(nomad.left) if nomad.left
+    end
+  end
+
+  # def post_order
+  #   node_array = []
+  #   stack = [@root]
+  #   until stack.empty?
+  #
+
   def delete(value)
     node_to_delete = find(value)
     return if node_to_delete.nil?
