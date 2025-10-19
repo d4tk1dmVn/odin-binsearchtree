@@ -64,13 +64,25 @@ class BinaryTree
       stack.push(nomad.right) if nomad.right
       stack.push(nomad.left) if nomad.left
     end
+    node_array unless block_given?
   end
 
-  # def post_order
-  #   node_array = []
-  #   stack = [@root]
-  #   until stack.empty?
-  #
+  def post_order
+    node_array, stack, visited = [], [@root], [false]
+    until stack.empty?
+      node, visited = stack.pop, visited.pop
+      next unless node
+
+      if visited
+        node_array.append(node.value)
+        yield node if block_given?
+      else
+        stack.push(node, node.right, node.left)
+        visited.push(true, false, false)
+      end
+    end
+    node_array unless block_given?
+  end
 
   def delete(value)
     node_to_delete = find(value)
