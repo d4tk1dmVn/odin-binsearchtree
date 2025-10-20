@@ -103,6 +103,35 @@ class BinaryTree
     end
   end
 
+  def height(value)
+    node = find(value)
+    return if node.nil?
+
+    max_height = 0
+    queue = []
+    queue.prepend([node.left, 1]) if node.left
+    queue.prepend([node.right, 1]) if node.right
+    until queue.empty?
+      node, height = queue.pop
+      max_height = height if max_height < height
+      queue.prepend([node.left, height + 1]) if node.left
+      queue.prepend([node.right, height + 1]) if node.right
+    end
+    max_height
+  end
+
+  def depth(value)
+    node = find(value)
+    return if node.nil?
+
+    depth = 0
+    until node == @root
+      depth += 1
+      node = node.parent
+    end
+    depth
+  end
+
   private
 
   def build_tree(array)
