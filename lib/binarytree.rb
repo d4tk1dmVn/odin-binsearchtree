@@ -109,13 +109,13 @@ class BinaryTree
 
     max_height = 0
     queue = []
-    queue.prepend([node.left, 1]) if node.left
-    queue.prepend([node.right, 1]) if node.right
+    queue.prepend([node.left, 1], [node.right, 1])
     until queue.empty?
       node, height = queue.pop
+      next unless node
+
       max_height = height if max_height < height
-      queue.prepend([node.left, height + 1]) if node.left
-      queue.prepend([node.right, height + 1]) if node.right
+      queue.prepend([node.left, height + 1], [node.right, height + 1])
     end
     max_height
   end
@@ -130,6 +130,17 @@ class BinaryTree
       node = node.parent
     end
     depth
+  end
+
+  def balanced?
+    heights = {}
+    post_order do |node|
+      heights[node] = 0 if node.leaf?
+      pair = []
+      pair.append(heights[node.left]) if heights[node.left]
+      pair.append(heights[node.right]) if heights[node.right]
+      heights[node] = 1 + pair.max
+    end
   end
 
   private
