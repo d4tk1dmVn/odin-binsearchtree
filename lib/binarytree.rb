@@ -68,17 +68,17 @@ class BinaryTree
   end
 
   def post_order
-    node_array, stack, visited = [], [@root], [false]
+    node_array, stack, visited_array = [], [@root], [false]
     until stack.empty?
-      node, visited = stack.pop, visited.pop
+      node, was_visited = stack.pop, visited_array.pop
       next unless node
 
-      if visited
+      if was_visited
         node_array.append(node.value)
         yield node if block_given?
       else
         stack.push(node, node.right, node.left)
-        visited.push(true, false, false)
+        visited_array.push(true, false, false)
       end
     end
     node_array unless block_given?
@@ -133,14 +133,17 @@ class BinaryTree
   end
 
   def balanced?
-    heights = {}
+    heights = all_heights
     post_order do |node|
-      heights[node] = 0 if node.leaf?
-      pair = []
-      pair.append(heights[node.left]) if heights[node.left]
-      pair.append(heights[node.right]) if heights[node.right]
-      heights[node] = 1 + pair.max
+      left_subtree_height = heights[node.left] || -1
+      right_subtree_height = heights[node.right] || -1
+      return false if (left_subtree_height - right_subtree_height).abs > 1
     end
+    true
+  end
+
+  def rebalance
+    @root = build_tree(level_order.sort) unless balanced?
   end
 
   private
@@ -178,5 +181,16 @@ class BinaryTree
     else
       replace_with_child(node, node.left || node.right)
     end
+  end
+
+  def all_heights
+    heights = {}
+    post_order do |node|
+      pair = []
+      pair.append(heights[node.left]) if heights[node.left]
+      pair.append(heights[node.right]) if heights[node.right]
+      heights[node] = node.leaf? ? 0 : 1 + pair.max
+    end
+    heights
   end
 end
