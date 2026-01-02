@@ -17,9 +17,10 @@ class BinaryTree
   def find(value)
     return if empty?
 
+    aux_node = BinaryNode.new(value)
     nomad = @root
-    until nomad.nil? || nomad.value == value
-      nomad = nomad.value > value ? nomad.left : nomad.right
+    until nomad.nil? || nomad == aux_node
+      nomad = nomad > aux_node ? nomad.left : nomad.right
     end
     nomad
   end
@@ -94,12 +95,13 @@ class BinaryTree
   def insert(value)
     return unless find(value).nil?
 
+    aux_node = BinaryNode.new(value)
     if empty?
-      @root = BinaryNode.new(value)
+      @root = aux_node
     else
       nomad = @root
-      nomad = nomad.value > value ? nomad.left : nomad.right until nomad.can_sire?(value)
-      nomad.sire_child(BinaryNode.new(value))
+      nomad = nomad > aux_node ? nomad.left : nomad.right until nomad.can_sire?(aux_node)
+      nomad.sire_child(aux_node)
     end
   end
 

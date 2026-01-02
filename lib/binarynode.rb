@@ -25,8 +25,8 @@ class BinaryNode
     parent > self ? parent.left = nil : parent.right = nil
   end
 
-  def can_sire?(value)
-    (@left.nil? && @value > value) || (@right.nil? && @value < value)
+  def can_sire?(other)
+    (@left.nil? && self > other) || (@right.nil? && self < other)
   end
 
   def leaf?
